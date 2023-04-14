@@ -3,6 +3,14 @@ import json
 
 authorization_key = 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
 
+def guest_key():
+	headers = {
+		'authorization': authorization_key,
+		}
+	response = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers)
+	guest_token = response.json()["guest_token"]
+	return guest_token
+
 def video_url(tweet_id):
 	api_url = 'https://api.twitter.com/1.1/statuses/show/%s.json' % tweet_id
 	headers = {
