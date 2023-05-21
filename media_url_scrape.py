@@ -15,7 +15,7 @@ def video_url(tweet_id):
 	api_url = 'https://api.twitter.com/1.1/statuses/show/%s.json' % tweet_id
 	headers = {
 		'authorization': authorization_key,
-		'x-guest-token': guest_key()
+		'x-guest-token': guest_key(authorization_key)
 		}
 		
 	data = {
@@ -30,4 +30,18 @@ def video_url(tweet_id):
 	tweet_data = res.json()
 	ex_entities = tweet_data['extended_entities']["media"][0]["video_info"]["variants"][3]["url"]
 	return ex_entities
-	
+
+def media_search(username,quantity=10):
+        url = f'https://api.twitter.com/1.1/search/tweets.json?q=from:@{username}%20filter:links'
+        headers = {
+        'authorization': authorization_key,
+        'x-guest-token': guest_key(authorization_key)
+        }
+        response = requests.get(url, headers=headers).json()
+        media_url = []
+        for i in range(quantity):
+            try:
+                media_url.append(response["statuses"][i]['extended_entities']["media"][0]["media_url"])
+            except:
+                media_url.append(response["statuses"][i]['extended_entities']["media"][0]["video_info"]["variants"][3]["url"])
+        return media_url
